@@ -473,6 +473,9 @@ export interface AppState {
     | "compactArrowProperties"
     | null;
   openSidebar: { name: SidebarName; tab?: SidebarTabName } | null;
+  /** whether resolved comment threads are shown on canvas and in the
+   * comments sidebar list; resolved threads are hidden by default */
+  showResolvedComments: boolean;
   openDialog:
     | null
     | { name: "imageExport" | "help" | "jsonExport" }
