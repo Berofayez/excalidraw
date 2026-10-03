@@ -24,6 +24,8 @@ import {
   newMagicFrameElement,
   newStickyNoteElement,
   newTextElement,
+  newCommentElement,
+  newCommentReplyElement,
 } from "@excalidraw/element";
 
 import { isUsingAdaptiveRadius, getSelectedElements } from "@excalidraw/element";
@@ -48,6 +50,8 @@ import type {
   FixedSegment,
   NonDeleted,
   NonDeletedExcalidrawElement,
+  ExcalidrawCommentElement,
+  ExcalidrawCommentReplyElement,
 } from "@excalidraw/element/types";
 
 import type { Mutable } from "@excalidraw/common/utility-types";
@@ -199,7 +203,11 @@ export class API {
     roughness?: ExcalidrawGenericElement["roughness"];
     opacity?: ExcalidrawGenericElement["opacity"];
     // text props
-    text?: T extends "text" ? ExcalidrawTextElement["text"] : never;
+    text?: T extends "text"
+      ? ExcalidrawTextElement["text"]
+      : T extends "commentReply"
+      ? ExcalidrawCommentReplyElement["text"]
+      : never;
     fontSize?: T extends "text" ? ExcalidrawTextElement["fontSize"] : never;
     fontFamily?: T extends "text" ? ExcalidrawTextElement["fontFamily"] : never;
     textAlign?: T extends "text" ? ExcalidrawTextElement["textAlign"] : never;
@@ -219,6 +227,18 @@ export class API {
       ? ExcalidrawFreeDrawElement["strokeOptions"]
       : never;
     locked?: boolean;
+    // comment thread props
+    targetIds?: T extends "comment"
+      ? ExcalidrawCommentElement["targetIds"]
+      : never;
+    resolved?: T extends "comment"
+      ? ExcalidrawCommentElement["resolved"]
+      : never;
+    threadId?: T extends "commentReply"
+      ? ExcalidrawCommentReplyElement["threadId"]
+      : never;
+    authorId?: T extends "comment" | "commentReply" ? string : never;
+    authorName?: T extends "comment" | "commentReply" ? string : never;
     fileId?: T extends "image" ? string : never;
     scale?: T extends "image" ? ExcalidrawImageElement["scale"] : never;
     status?: T extends "image" ? ExcalidrawImageElement["status"] : never;
@@ -251,6 +271,10 @@ export class API {
       ? ExcalidrawMagicFrameElement
       : T extends "stickynote"
       ? ExcalidrawStickyNoteElement
+      : T extends "comment"
+      ? ExcalidrawCommentElement
+      : T extends "commentReply"
+      ? ExcalidrawCommentReplyElement
       : ExcalidrawGenericElement
   > => {
     let element: Mutable<ExcalidrawElement> = null!;
@@ -404,6 +428,24 @@ export class API {
         break;
       case "magicframe":
         element = newMagicFrameElement({ ...base, width, height });
+        break;
+      case "comment":
+        element = newCommentElement({
+          ...base,
+          targetIds: rest.targetIds ?? [],
+          resolved: rest.resolved ?? false,
+          authorId: rest.authorId ?? "test-author-id",
+          authorName: rest.authorName ?? "test-author-name",
+        });
+        break;
+      case "commentReply":
+        element = newCommentReplyElement({
+          ...base,
+          threadId: rest.threadId ?? "",
+          text: rest.text || "test reply",
+          authorId: rest.authorId ?? "test-author-id",
+          authorName: rest.authorName ?? "test-author-name",
+        });
         break;
       default:
         assertNever(

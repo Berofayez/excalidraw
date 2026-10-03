@@ -30,6 +30,8 @@ import type {
   ExcalidrawFlowchartNodeElement,
   ExcalidrawLinearElementSubType,
   ExcalidrawStickyNoteElement,
+  ExcalidrawCommentElement,
+  ExcalidrawCommentReplyElement,
 } from "./types";
 
 export const isInitializedImageElement = <T extends ExcalidrawElement>(
@@ -95,6 +97,18 @@ export const isFrameLikeElement = <T extends ExcalidrawElement>(
     element != null &&
     (element.type === "frame" || element.type === "magicframe")
   );
+};
+
+export const isCommentElement = <T extends ExcalidrawElement>(
+  element: T | null | undefined,
+): element is T & ExcalidrawCommentElement => {
+  return element != null && element.type === "comment";
+};
+
+export const isCommentReplyElement = <T extends ExcalidrawElement>(
+  element: T | null | undefined,
+): element is T & ExcalidrawCommentReplyElement => {
+  return element != null && element.type === "commentReply";
 };
 
 export const isFreeDrawElement = <T extends ExcalidrawElement>(
@@ -273,7 +287,9 @@ export const isExcalidrawElement = (
     case "frame":
     case "magicframe":
     case "image":
-    case "selection": {
+    case "selection":
+    case "comment":
+    case "commentReply": {
       return true;
     }
     default: {

@@ -517,6 +517,8 @@ export const intersectElementWithLineSegment = (
     case "frame":
     case "selection":
     case "magicframe":
+    case "comment":
+    case "commentReply":
       return intersectRectanguloidWithLineSegment(
         element,
         elementsMap,

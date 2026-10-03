@@ -42,6 +42,8 @@ export const distanceToElement = (
     case "embeddable":
     case "frame":
     case "magicframe":
+    case "comment":
+    case "commentReply":
       return distanceToRectanguloidElement(element, elementsMap, p);
     case "diamond":
       return distanceToDiamondElement(element, elementsMap, p);

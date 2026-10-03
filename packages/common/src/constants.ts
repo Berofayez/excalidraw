@@ -262,6 +262,9 @@ export const STICKY_NOTE_SHADOW_OFFSET = 3;
 export const STICKY_NOTE_SHADOW_OPACITY = 0.16;
 export const STICKY_NOTE_EDGE_SHADOW_WIDTH = 0.5;
 export const STICKY_NOTE_EDGE_SHADOW_OPACITY = 0.08;
+// fixed hit-testing/rendering size of a comment thread's pin icon; comment
+// elements are not user-resizable
+export const COMMENT_PIN_SIZE = 28;
 export const DEFAULT_FONT_FAMILY: FontFamilyValues = FONT_FAMILY.Excalifont;
 /** number of slots in the font-picker top-picks strip — pick customization
  * (replace / reorder) preserves it. Must equal `DEFAULT_FONTS.length` in

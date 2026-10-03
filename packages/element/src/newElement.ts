@@ -5,6 +5,7 @@ import {
   DEFAULT_TEXT_ALIGN,
   DEFAULT_STICKY_NOTE_SIZE,
   STICKY_NOTE_MIN_SIZE,
+  COMMENT_PIN_SIZE,
   DEFAULT_VERTICAL_ALIGN,
   DEFAULT_STROKE_STREAMLINE,
   VERTICAL_ALIGN,
@@ -56,6 +57,8 @@ import type {
   ExcalidrawElbowArrowElement,
   ExcalidrawLineElement,
   ExcalidrawStickyNoteElement,
+  ExcalidrawCommentElement,
+  ExcalidrawCommentReplyElement,
 } from "./types";
 
 export type ElementConstructorOpts = MarkOptional<
@@ -292,6 +295,46 @@ export const newMagicFrameElement = (
   );
 
   return frameElement;
+};
+
+export const newCommentElement = (
+  opts: {
+    targetIds: readonly string[];
+    authorId: string;
+    authorName: string;
+    resolved?: boolean;
+  } & ElementConstructorOpts,
+): NonDeleted<ExcalidrawCommentElement> => {
+  return {
+    ..._newElementBase<ExcalidrawCommentElement>("comment", {
+      ...opts,
+      width: COMMENT_PIN_SIZE,
+      height: COMMENT_PIN_SIZE,
+    }),
+    type: "comment",
+    targetIds: opts.targetIds,
+    resolved: opts.resolved ?? false,
+    authorId: opts.authorId,
+    authorName: opts.authorName,
+  };
+};
+
+export const newCommentReplyElement = (
+  opts: {
+    threadId: ExcalidrawCommentElement["id"];
+    text: string;
+    authorId: string;
+    authorName: string;
+  } & ElementConstructorOpts,
+): NonDeleted<ExcalidrawCommentReplyElement> => {
+  return {
+    ..._newElementBase<ExcalidrawCommentReplyElement>("commentReply", opts),
+    type: "commentReply",
+    threadId: opts.threadId,
+    text: opts.text,
+    authorId: opts.authorId,
+    authorName: opts.authorName,
+  };
 };
 
 /**

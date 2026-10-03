@@ -52,6 +52,8 @@ import type {
   ExcalidrawSelectionElement,
   ExcalidrawStickyNoteElement,
   ExcalidrawTextElement,
+  ExcalidrawCommentElement,
+  ExcalidrawCommentReplyElement,
 } from "@excalidraw/element/types";
 import type { Curve, LineSegment, Polygon, Radians } from "@excalidraw/math";
 
@@ -112,7 +114,9 @@ type RectangularElement =
   | ExcalidrawImageElement
   | ExcalidrawIframeElement
   | ExcalidrawTextElement
-  | ExcalidrawSelectionElement;
+  | ExcalidrawSelectionElement
+  | ExcalidrawCommentElement
+  | ExcalidrawCommentReplyElement;
 
 // polygon
 export const getPolygonShape = <Point extends GlobalPoint | LocalPoint>(

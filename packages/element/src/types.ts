@@ -34,7 +34,7 @@ export type FractionalIndex = string & { _brand: "franctionalIndex" };
 
 export type BoundElement = Readonly<{
   id: ExcalidrawLinearElement["id"];
-  type: "arrow" | "text";
+  type: "arrow" | "text" | "comment";
 }>;
 
 type _ExcalidrawElementBase = Readonly<{
@@ -189,6 +189,27 @@ export type ExcalidrawFrameLikeElement =
   | ExcalidrawFrameElement
   | ExcalidrawMagicFrameElement;
 
+export type ExcalidrawCommentElement = _ExcalidrawElementBase &
+  Readonly<{
+    type: "comment";
+    /** ids of the elements this thread is anchored to; empty once orphaned
+     * (all attached targets were deleted) — the thread is kept, not deleted,
+     * pinned at its last known anchor */
+    targetIds: readonly string[];
+    resolved: boolean;
+    authorId: string;
+    authorName: string;
+  }>;
+
+export type ExcalidrawCommentReplyElement = _ExcalidrawElementBase &
+  Readonly<{
+    type: "commentReply";
+    threadId: ExcalidrawCommentElement["id"];
+    text: string;
+    authorId: string;
+    authorName: string;
+  }>;
+
 /**
  * These are elements that don't have any additional properties.
  */
@@ -213,7 +234,9 @@ export type ExcalidrawRectanguloidElement =
   | ExcalidrawIframeLikeElement
   | ExcalidrawFrameLikeElement
   | ExcalidrawEmbeddableElement
-  | ExcalidrawSelectionElement;
+  | ExcalidrawSelectionElement
+  | ExcalidrawCommentElement
+  | ExcalidrawCommentReplyElement;
 
 /**
  * ExcalidrawElement should be JSON serializable and (eventually) contain
@@ -231,7 +254,9 @@ export type ExcalidrawElement =
   | ExcalidrawFrameElement
   | ExcalidrawMagicFrameElement
   | ExcalidrawIframeElement
-  | ExcalidrawEmbeddableElement;
+  | ExcalidrawEmbeddableElement
+  | ExcalidrawCommentElement
+  | ExcalidrawCommentReplyElement;
 
 export type ExcalidrawNonSelectionElement = Exclude<
   ExcalidrawElement,
